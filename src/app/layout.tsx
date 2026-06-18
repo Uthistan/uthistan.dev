@@ -7,6 +7,7 @@ const inter = Inter({
   display: "swap",
 });
 
+
 export const metadata: Metadata = {
   title: "Uthistan — Full-Stack Engineer",
   description: "Full-stack engineer building web apps, mobile products, CRMs and SaaS platforms. Bengaluru, India.",
