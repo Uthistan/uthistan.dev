@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #080808;
+  --bg1: #0c0c0c;
+  --bg2: #101010;
+  --ink: #eeebe6;
+  --dim: #777;
+  --dim2: #444;
+  --border: rgba(255, 255, 255, 0.07);
+  --b2: rgba(255, 255, 255, 0.12);
+  --gold: #c9b99b;
+}
+
+html { -webkit-font-smoothing: antialiased; scroll-behavior: auto; }
+body { background: var(--bg); color: var(--ink); cursor: none; overflow-x: hidden; }
+
+.cursor-dot, .cursor-ring {
+  position: fixed; border-radius: 50%; pointer-events: none; top: 0; left: 0; will-change: transform;
+}
+.cursor-dot { width: 5px; height: 5px; background: var(--ink); z-index: 9999; transition: background .2s; }
+.cursor-ring { width: 28px; height: 28px; border: 1px solid rgba(255,255,255,.25); z-index: 9998; transition: width .3s, height .3s, border-color .3s; }
+.cursor-hover .cursor-ring { width: 48px; height: 48px; border-color: rgba(201,185,155,.4); }
+.cursor-hover .cursor-dot { background: var(--gold); }
+
+.marquee-fwd { animation: mql 28s linear infinite; }
+.marquee-rev { animation: mqr 36s linear infinite; }
+.banner-anim { animation: mql 15s linear infinite; }
+@keyframes mql { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+@keyframes mqr { 0%{transform:translateX(-50%)} 100%{transform:translateX(0)} }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+.avail-dot { animation: pulse 2s infinite; }
+
+@keyframes scan { 0%{left:-100%} 100%{left:100%} }
+.scan-line::after { content:''; position:absolute; inset-block:0; left:-100%; width:100%; background:var(--gold); animation:scan 1.8s ease-in-out infinite; }
+
+/* Service panels */
+.svc-panel { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center; align-items:center; opacity:0; transition:opacity .45s ease; pointer-events:none; }
+.svc-panel.active { opacity:1; pointer-events:auto; }
+
+/* Visuals */
+@keyframes glow { 0%,100%{background:transparent;border-color:rgba(201,185,155,.07)} 50%{background:rgba(201,185,155,.07);border-color:rgba(201,185,155,.3)} }
+@keyframes fl { 0%{opacity:.3} 100%{opacity:.9} }
+@keyframes np { 0%{border-color:rgba(201,185,155,.06)} 100%{border-color:rgba(201,185,155,.4);box-shadow:0 0 16px rgba(201,185,155,.06)} }
+@keyframes bf { 0%{opacity:.4;transform:scaleX(.5);transform-origin:left} 100%{opacity:1;transform:scaleX(1)} }
+@keyframes bk { 0%,100%{opacity:.3} 50%{opacity:1} }
+@keyframes ag { 0%,100%{box-shadow:none} 50%{box-shadow:0 0 24px rgba(201,185,155,.1)} }
+
+/* FAQ */
+.faq-answer { max-height:0; overflow:hidden; transition:max-height .45s ease, padding .35s ease; }
+.faq-item.open .faq-answer { max-height:200px; padding-bottom:20px; }
+.faq-icon { transition:transform .35s ease, color .25s; }
+.faq-item.open .faq-icon { transform:rotate(45deg); color:var(--gold); }
+
+/* Project hover */
+.proj-fill { position:absolute; inset:0; background:linear-gradient(90deg,rgba(201,185,155,.06),rgba(201,185,155,.02)); transform:scaleX(0); transform-origin:left; transition:transform .55s cubic-bezier(.76,0,.24,1); z-index:0; }
+.proj-row:hover .proj-fill { transform:scaleX(1); }
+.proj-row:hover .proj-name { color:var(--gold); }
+.proj-row:hover .proj-arrow { opacity:1; transform:translateX(0); }
+.proj-row:hover .proj-tag { border-color:rgba(201,185,155,.3); }
+
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+
+/* ===== MOBILE ===== */
+
+/* Touch devices: hide desktop cursor, restore pointer */
+@media (pointer: coarse) {
+  body { cursor: auto !important; }
+  .cursor-dot, .cursor-ring { display: none !important; }
+}
+
+@media (max-width: 767px) {
+  /* Hero / CTA: scale large headings down for narrow viewports */
+  #hero h1 { font-size: max(1.9rem, 8.5vw) !important; }
+  #cta h2  { font-size: max(2.2rem, 8vw) !important; }
+
+  /* Stats: 2-col grid — remove right border on even items, add row divider */
+  .stat-item:nth-child(2n) { border-right: none !important; }
+  .stat-item:nth-child(1), .stat-item:nth-child(2) { border-bottom: 1px solid var(--border); }
+
+  /* Work: collapse 4-col project row to num + content only */
+  .proj-row { grid-template-columns: 32px 1fr !important; }
+  .proj-yr  { display: none !important; }
+  .proj-arrow { display: none !important; }
+
+  /* FAQ two-column → single column */
+  .faq-section { grid-template-columns: 1fr !important; }
+
+  /* Contact two-column → single column */
+  .ct-section { grid-template-columns: 1fr !important; }
+}
