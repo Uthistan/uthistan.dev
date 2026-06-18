@@ -6,20 +6,20 @@ import Loader from "@/components/ui/Loader";
 import Navbar from "@/components/ui/Navbar";
 import Marquee from "@/components/ui/Marquee";
 import Hero from "@/components/sections/Hero";
-import Stats from "@/components/sections/Stats";
-import Work from "@/components/sections/Work";
-import About from "@/components/sections/About";
-import Banner from "@/components/sections/Banner";
-import FAQ from "@/components/sections/FAQ";
-import Contact from "@/components/sections/Contact";
-import CTA from "@/components/sections/CTA";
-import Footer from "@/components/sections/Footer";
 
 // Cursor is client-only (uses mouse events)
 const Cursor = dynamic(() => import("@/components/ui/Cursor"), { ssr: false });
 
-// Services loads after mount to avoid SSR issues with sticky scroll
+// Below-fold sections — code-split to reduce initial bundle
+const Stats   = dynamic(() => import("@/components/sections/Stats"));
+const Work    = dynamic(() => import("@/components/sections/Work"));
 const Services = dynamic(() => import("@/components/sections/Services"), { ssr: false });
+const About   = dynamic(() => import("@/components/sections/About"));
+const Banner  = dynamic(() => import("@/components/sections/Banner"));
+const FAQ     = dynamic(() => import("@/components/sections/FAQ"));
+const Contact = dynamic(() => import("@/components/sections/Contact"));
+const CTA     = dynamic(() => import("@/components/sections/CTA"));
+const Footer  = dynamic(() => import("@/components/sections/Footer"));
 
 const MARQUEE_1 = ["Full-Stack Dev", "Mobile Apps", "CRM Systems", "SaaS Products", "API Integrations", "React & Node", "Enterprise"];
 const MARQUEE_2 = ["React", "Node.js", "TypeScript", "React Native", "PostgreSQL", "MongoDB", "AWS", "Next.js", "Tailwind", "Docker"];

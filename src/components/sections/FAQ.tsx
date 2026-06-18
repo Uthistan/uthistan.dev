@@ -8,6 +8,7 @@ export default function FAQ() {
 
   useEffect(() => {
     const init = async () => {
+      if (window.innerWidth < 768) return;
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);

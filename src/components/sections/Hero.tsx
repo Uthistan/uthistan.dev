@@ -12,11 +12,12 @@ export default function Hero({ ready }: { ready: boolean }) {
     let cleanupAsync: (() => void) | null = null;
 
     const animate = async () => {
+      if (!alive) return;
+      if (window.innerWidth < 768) return;
+
       const { gsap } = await import("gsap");
       const { ScrollTrigger } = await import("gsap/ScrollTrigger");
       gsap.registerPlugin(ScrollTrigger);
-
-      if (!alive) return;
 
       gsap.set(".h-wd", { y: "115%" });
 
@@ -86,15 +87,15 @@ export default function Hero({ ready }: { ready: boolean }) {
   }, [ready]);
 
   return (
-    <section id="hero" className="min-h-screen flex flex-col justify-end px-5 md:px-12 pb-10 md:pb-14 relative overflow-hidden" style={{ borderBottom: "1px solid var(--border)" }}>
+    <section id="hero" className="min-h-svh flex flex-col justify-center md:justify-end items-center md:items-start px-5 md:px-12 pb-0 md:pb-14 relative overflow-hidden" style={{ borderBottom: "1px solid var(--border)" }}>
       <canvas id="orb" className="absolute inset-0 pointer-events-none" style={{ opacity: 0.55 }} aria-hidden="true" />
 
-      <div ref={eyeRef} className="flex items-center gap-3 mb-7 text-[10px] tracking-[0.18em] uppercase relative z-10" style={{ color: "var(--dim2)" }}>
+      <div ref={eyeRef} className="flex items-center justify-center md:justify-start gap-3 mb-7 text-[10px] tracking-[0.18em] uppercase relative z-10 w-full" style={{ color: "var(--dim2)" }}>
         <span className="w-6 h-px" style={{ background: "var(--dim2)" }} />
         Full-Stack Engineer · Bengaluru, India
       </div>
 
-      <h1 ref={titleRef} className="relative z-10" style={{ fontSize: "clamp(3.4rem,8.5vw,9rem)", fontWeight: 500, letterSpacing: "-0.055em", lineHeight: 0.91 }}>
+      <h1 ref={titleRef} className="relative z-10 w-full text-center md:text-left" style={{ fontSize: "clamp(3.4rem,8.5vw,9rem)", fontWeight: 500, letterSpacing: "-0.055em", lineHeight: 0.91 }}>
         {["The engineer your", "business hires once", "and keeps calling back."].map((line, i) => (
           <span key={i} className="block overflow-hidden">
             <span className="h-wd block">
@@ -108,11 +109,11 @@ export default function Hero({ ready }: { ready: boolean }) {
         ))}
       </h1>
 
-      <div ref={footRef} className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 md:gap-0 mt-8 md:mt-12 pt-6 md:pt-8 relative z-10" style={{ borderTop: "1px solid var(--border)" }}>
-        <p className="text-[13px] leading-[1.82] max-w-[290px]" style={{ color: "var(--dim)" }}>
+      <div ref={footRef} className="flex flex-col md:flex-row md:justify-between md:items-end items-center gap-6 md:gap-0 mt-8 md:mt-12 pt-6 md:pt-8 relative z-10 w-full" style={{ borderTop: "1px solid var(--border)" }}>
+        <p className="text-[13px] leading-[1.82] max-w-[290px] text-center md:text-left" style={{ color: "var(--dim)" }}>
           I build web apps, mobile products, CRMs and SaaS platforms — for startups, SMBs, and everything in between.
         </p>
-        <div className="flex flex-col items-start md:items-end gap-3">
+        <div className="flex flex-col items-center md:items-end gap-3">
           <div className="inline-flex items-center gap-2 text-[11px] px-4 py-2 rounded-full" style={{ border: "1px solid var(--b2)", color: "var(--dim2)" }}>
             <span className="avail-dot w-[6px] h-[6px] rounded-full" style={{ background: "#4ade80" }} />
             Available for projects
