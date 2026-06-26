@@ -15,6 +15,7 @@ export default function Work() {
         scrollTrigger: { trigger: ref.current, start: "top 80%" },
         opacity: 0, x: -18, stagger: 0.09, duration: 0.65, ease: "power3.out",
       });
+      ScrollTrigger.refresh();
     };
     init();
   }, []);

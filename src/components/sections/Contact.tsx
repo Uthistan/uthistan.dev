@@ -1,13 +1,23 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const WA_NUMBER = "919585238558";
 
 const LINKS = [
   {
     label: "Email",
-    value: "uthistan666@gmail.com",
-    href: "mailto:uthistan666@gmail.com",
+    value: "uthistanravi@gmail.com",
+    href: "mailto:uthistanravi@gmail.com",
+    target: undefined as string | undefined,
+    rel: undefined as string | undefined,
   },
-  { label: "WhatsApp", value: "+91 95852 38558", href: "#" },
+  {
+    label: "WhatsApp",
+    value: "+91 95852 38558",
+    href: `https://wa.me/${WA_NUMBER}`,
+    target: "_blank",
+    rel: "noopener noreferrer",
+  },
   {
     label: "LinkedIn",
     value: "linkedin.com/in/contactuthistanravi",
@@ -19,6 +29,8 @@ const LINKS = [
 
 export default function Contact() {
   const ref = useRef<HTMLElement>(null);
+  const [form, setForm] = useState({ name: "", email: "", projectType: "", message: "" });
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const init = async () => {
@@ -50,9 +62,22 @@ export default function Contact() {
         duration: 0.5,
         ease: "power2.out",
       });
+      ScrollTrigger.refresh();
     };
     init();
   }, []);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const { name, email, projectType, message } = form;
+    if (!name.trim() || !email.trim() || !projectType.trim() || !message.trim()) {
+      setError("Please fill in all fields before sending.");
+      return;
+    }
+    setError("");
+    const text = `Hi Uthistan,\n\nName: ${name}\nEmail: ${email}\nProject type: ${projectType}\n\n${message}`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
+  }
 
   return (
     <section
@@ -87,7 +112,7 @@ export default function Contact() {
         >
           Tell me what
           <br />
-          you're{" "}
+          you&apos;re{" "}
           <em
             style={{
               fontStyle: "italic",
@@ -102,13 +127,15 @@ export default function Contact() {
           className="text-[13px] leading-[1.8] mb-10"
           style={{ color: "var(--dim)" }}
         >
-          Even if it's just an idea. I'll tell you if I can help — and how.
+          Even if it&apos;s just an idea. I&apos;ll tell you if I can help — and how.
         </p>
         {LINKS.map((l) => (
           <a
             key={l.label}
             href={l.href}
-            className="ct-link flex justify-between items-center py-4 cursor-none transition-[border-color] duration-300"
+            target={l.target}
+            rel={l.rel}
+            className="ct-link group flex justify-between items-center py-4 cursor-none transition-[border-color] duration-300"
             style={{ borderBottom: "1px solid var(--border)" }}
           >
             <span
@@ -118,7 +145,7 @@ export default function Contact() {
               {l.label}
             </span>
             <span
-              className="ct-v text-[13px] transition-colors duration-300"
+              className="ct-v text-[13px] transition-colors duration-300 group-hover:text-(--ink)"
               style={{ color: "var(--dim)" }}
             >
               {l.value} ↗
@@ -126,50 +153,59 @@ export default function Contact() {
           </a>
         ))}
       </div>
-      <div className="cf flex flex-col gap-3">
-        {[
-          { type: "text", placeholder: "Your name", auto: "name" },
-          { type: "email", placeholder: "Email address", auto: "email" },
-          {
-            type: "text",
-            placeholder: "Project type  (Web app / CRM / SaaS / Mobile)",
-            auto: "",
-          },
-        ].map((f) => (
-          <input
-            key={f.placeholder}
-            className="cf-field w-full rounded-lg px-[18px] py-4 text-[13px] outline-none transition-[border-color] duration-300"
-            style={{
-              background: "rgba(255,255,255,.03)",
-              border: "1px solid var(--b2)",
-              color: "var(--ink)",
-              fontFamily: "inherit",
-            }}
-            type={f.type}
-            placeholder={f.placeholder}
-            autoComplete={f.auto || undefined}
-            suppressHydrationWarning
-          />
-        ))}
-        <textarea
-          className="cf-field w-full rounded-lg px-[18px] py-4 text-[13px] outline-none resize-none transition-[border-color] duration-300"
-          style={{
-            background: "rgba(255,255,255,.03)",
-            border: "1px solid var(--b2)",
-            color: "var(--ink)",
-            fontFamily: "inherit",
-            height: 110,
-          }}
-          placeholder="Tell me about your project..."
-          suppressHydrationWarning
+      <form className="cf flex flex-col gap-3" onSubmit={handleSubmit} noValidate>
+        <label htmlFor="cf-name" className="sr-only">Your name</label>
+        <input
+          id="cf-name"
+          className="cf-field w-full rounded-lg px-4.5 py-4 text-[13px] outline-none transition-[border-color,box-shadow] duration-300"
+          style={{ background: "var(--input-bg)", border: "1px solid var(--b2)", color: "var(--ink)", fontFamily: "inherit" }}
+          type="text"
+          placeholder="Your name"
+          autoComplete="name"
+          value={form.name}
+          onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
         />
+        <label htmlFor="cf-email" className="sr-only">Email address</label>
+        <input
+          id="cf-email"
+          className="cf-field w-full rounded-lg px-4.5 py-4 text-[13px] outline-none transition-[border-color,box-shadow] duration-300"
+          style={{ background: "var(--input-bg)", border: "1px solid var(--b2)", color: "var(--ink)", fontFamily: "inherit" }}
+          type="email"
+          placeholder="Email address"
+          autoComplete="email"
+          value={form.email}
+          onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+        />
+        <label htmlFor="cf-project" className="sr-only">Project type</label>
+        <input
+          id="cf-project"
+          className="cf-field w-full rounded-lg px-4.5 py-4 text-[13px] outline-none transition-[border-color,box-shadow] duration-300"
+          style={{ background: "var(--input-bg)", border: "1px solid var(--b2)", color: "var(--ink)", fontFamily: "inherit" }}
+          type="text"
+          placeholder="Project type  (Web app / CRM / SaaS / Mobile)"
+          value={form.projectType}
+          onChange={(e) => setForm((f) => ({ ...f, projectType: e.target.value }))}
+        />
+        <label htmlFor="cf-message" className="sr-only">Tell me about your project</label>
+        <textarea
+          id="cf-message"
+          className="cf-field w-full rounded-lg px-4.5 py-4 text-[13px] outline-none resize-none transition-[border-color,box-shadow] duration-300"
+          style={{ background: "var(--input-bg)", border: "1px solid var(--b2)", color: "var(--ink)", fontFamily: "inherit", height: 110 }}
+          placeholder="Tell me about your project..."
+          value={form.message}
+          onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+        />
+        {error && (
+          <p role="alert" className="text-[11px] tracking-[0.03em]" style={{ color: "#e07070" }}>{error}</p>
+        )}
         <button
-          className="w-full py-4 rounded-lg text-[11px] font-semibold tracking-[0.08em] uppercase mt-1 transition-opacity duration-200 hover:opacity-85"
+          type="submit"
+          className="w-full py-4 rounded-lg text-[11px] font-semibold tracking-[0.08em] uppercase mt-1 transition-opacity duration-200 hover:opacity-85 cursor-pointer"
           style={{ background: "var(--gold)", color: "#070707" }}
         >
-          Send message ↗
+          Send via WhatsApp ↗
         </button>
-      </div>
+      </form>
     </section>
   );
 }

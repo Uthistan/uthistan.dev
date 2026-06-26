@@ -36,9 +36,10 @@ export default function FAQ() {
             <button
               className="fq-q w-full flex justify-between items-center py-5 gap-4 text-left cursor-none"
               onClick={() => setOpen(open === i ? null : i)}
+              aria-expanded={open === i}
             >
               <span className="text-[14px] font-medium tracking-[-0.01em]">{faq.q}</span>
-              <span className="faq-icon fq-ic text-[22px] flex-shrink-0 leading-none" style={{ color: "var(--dim)" }}>+</span>
+              <span className="faq-icon fq-ic text-[22px] shrink-0 leading-none" style={{ color: "var(--dim)" }}>+</span>
             </button>
             <div className="faq-answer fq-a text-[13px] leading-[1.8]" style={{ color: "var(--dim)" }}>
               {faq.a}

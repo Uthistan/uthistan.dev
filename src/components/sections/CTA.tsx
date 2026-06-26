@@ -43,18 +43,21 @@ export default function CTA() {
       </h2>
       <div className="cta-bts flex gap-3 relative z-10 flex-wrap justify-center">
         <button
-          className="px-8 py-4 rounded-full text-[11px] font-semibold tracking-[0.07em] uppercase transition-[opacity,transform] hover:opacity-90 hover:scale-[1.02]"
+          className="px-5 py-3 md:px-8 md:py-4 rounded-full text-[10px] md:text-[11px] font-semibold tracking-[0.07em] uppercase transition-[opacity,transform] hover:opacity-90 hover:scale-[1.02]"
           style={{ background: "var(--gold)", color: "#070707" }}
-          onClick={() => { window.location.href = "mailto:hello@uthistan.dev"; }}
+          onClick={() => { window.location.href = "mailto:uthistanravi@gmail.com"; }}
         >
           Send me an email ↗
         </button>
-        <button
-          className="px-8 py-4 rounded-full text-[11px] tracking-[0.07em] uppercase border transition-[border-color,color] hover:border-white/30"
+        <a
+          href="https://wa.me/919585238558"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-5 py-3 md:px-8 md:py-4 rounded-full text-[10px] md:text-[11px] tracking-[0.07em] uppercase border transition-all hover:border-(--gold) hover:text-(--ink) hover:shadow-[0_0_18px_rgba(201,185,155,0.35)]"
           style={{ border: "1px solid var(--b2)", color: "var(--dim)" }}
         >
           WhatsApp me
-        </button>
+        </a>
       </div>
     </section>
   );

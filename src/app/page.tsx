@@ -9,11 +9,12 @@ import Hero from "@/components/sections/Hero";
 
 // Cursor is client-only (uses mouse events)
 const Cursor = dynamic(() => import("@/components/ui/Cursor"), { ssr: false });
+// Services uses Framer Motion useScroll which requires browser context
+const Services = dynamic(() => import("@/components/sections/Services"), { ssr: false });
 
-// Below-fold sections — code-split to reduce initial bundle
+// Below-fold sections — SSR-enabled so GSAP ScrollTrigger sees the full DOM on mount
 const Stats   = dynamic(() => import("@/components/sections/Stats"));
 const Work    = dynamic(() => import("@/components/sections/Work"));
-const Services = dynamic(() => import("@/components/sections/Services"), { ssr: false });
 const About   = dynamic(() => import("@/components/sections/About"));
 const Banner  = dynamic(() => import("@/components/sections/Banner"));
 const FAQ     = dynamic(() => import("@/components/sections/FAQ"));

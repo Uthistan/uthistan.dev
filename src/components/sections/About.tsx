@@ -22,6 +22,7 @@ export default function About() {
       gsap.from(el.querySelector(".ab-title"), { scrollTrigger: { trigger: el, start: "top 82%" }, opacity: 0, y: 28, duration: 0.85, ease: "power3.out" });
       gsap.from(el.querySelectorAll(".sk-row"), { scrollTrigger: { trigger: el, start: "top 80%" }, opacity: 0, x: 12, stagger: 0.07, duration: 0.55, ease: "power2.out" });
       gsap.from(el.querySelectorAll(".ab-p"), { scrollTrigger: { trigger: el, start: "top 78%" }, opacity: 0, y: 16, stagger: 0.1, duration: 0.65, ease: "power2.out" });
+      ScrollTrigger.refresh();
     };
     init();
   }, []);

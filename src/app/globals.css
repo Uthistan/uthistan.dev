@@ -6,14 +6,45 @@
   --bg2: #101010;
   --ink: #eeebe6;
   --dim: #777;
-  --dim2: #444;
+  --dim2: #555;
   --border: rgba(255, 255, 255, 0.07);
   --b2: rgba(255, 255, 255, 0.12);
   --gold: #c9b99b;
+  --input-bg: rgba(255, 255, 255, 0.03);
+  --nav-bg: rgba(8, 8, 8, 0.9);
+}
+
+html.light {
+  --bg: #f7f5f2;
+  --bg1: #f2f0ec;
+  --bg2: #eae7e2;
+  --ink: #1a1816;
+  --dim: #5c5751;
+  --dim2: #6b6560;
+  --border: rgba(0, 0, 0, 0.09);
+  --b2: rgba(0, 0, 0, 0.14);
+  --gold: #9a7c5e;
+  --input-bg: rgba(0, 0, 0, 0.03);
+  --nav-bg: rgba(247, 245, 242, 0.92);
 }
 
 html { -webkit-font-smoothing: antialiased; scroll-behavior: auto; }
 body { background: var(--bg); color: var(--ink); cursor: none; overflow-x: hidden; }
+
+/* Smooth theme switch — applied transiently via JS */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 250ms ease, color 250ms ease, border-color 250ms ease, box-shadow 250ms ease !important;
+}
+
+/* Global focus ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
 
 .cursor-dot, .cursor-ring {
   position: fixed; border-radius: 50%; pointer-events: none; top: 0; left: 0; will-change: transform;
@@ -22,6 +53,10 @@ body { background: var(--bg); color: var(--ink); cursor: none; overflow-x: hidde
 .cursor-ring { width: 28px; height: 28px; border: 1px solid rgba(255,255,255,.25); z-index: 9998; transition: width .3s, height .3s, border-color .3s; }
 .cursor-hover .cursor-ring { width: 48px; height: 48px; border-color: rgba(201,185,155,.4); }
 .cursor-hover .cursor-dot { background: var(--gold); }
+
+/* Light mode cursor — dark ring on light background */
+html.light .cursor-ring { border-color: rgba(0,0,0,0.18); }
+html.light .cursor-hover .cursor-ring { border-color: rgba(154,124,94,0.5); }
 
 .marquee-fwd { animation: mql 28s linear infinite; }
 .marquee-rev { animation: mqr 36s linear infinite; }
@@ -52,6 +87,8 @@ body { background: var(--bg); color: var(--ink); cursor: none; overflow-x: hidde
 .faq-item.open .faq-answer { max-height:200px; padding-bottom:20px; }
 .faq-icon { transition:transform .35s ease, color .25s; }
 .faq-item.open .faq-icon { transform:rotate(45deg); color:var(--gold); }
+.fq-q:hover .faq-icon { color: var(--ink); }
+.faq-item.open .fq-q:hover .faq-icon { color: var(--gold); }
 
 /* Project hover */
 .proj-fill { position:absolute; inset:0; background:linear-gradient(90deg,rgba(201,185,155,.06),rgba(201,185,155,.02)); transform:scaleX(0); transform-origin:left; transition:transform .55s cubic-bezier(.76,0,.24,1); z-index:0; }
@@ -59,6 +96,16 @@ body { background: var(--bg); color: var(--ink); cursor: none; overflow-x: hidde
 .proj-row:hover .proj-name { color:var(--gold); }
 .proj-row:hover .proj-arrow { opacity:1; transform:translateX(0); }
 .proj-row:hover .proj-tag { border-color:rgba(201,185,155,.3); }
+
+/* Contact link hover */
+.ct-link:hover .ct-v { color: var(--ink); }
+
+/* Form field focus */
+.cf-field:focus {
+  border-color: var(--gold) !important;
+  box-shadow: 0 0 0 3px rgba(201, 185, 155, 0.1);
+  outline: none;
+}
 
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
 
