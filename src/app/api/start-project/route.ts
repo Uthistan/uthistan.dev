@@ -14,9 +14,8 @@ export const runtime = "nodejs";
 export const maxDuration = 30;
 
 const TO_EMAIL = process.env.DECLARATION_TO_EMAIL ?? "uthistanravi@gmail.com";
-// Resend's shared sender works without a verified domain and can deliver to the
-// account owner — override once a custom domain is verified.
-const FROM_EMAIL = process.env.DECLARATION_FROM_EMAIL ?? "Uthistan <onboarding@resend.dev>";
+// Sends from the verified uthistan.com domain in Resend.
+const FROM_EMAIL = process.env.DECLARATION_FROM_EMAIL ?? "Uthistan <declarations@uthistan.com>";
 
 const MAX_BODY_BYTES = 32 * 1024;
 
