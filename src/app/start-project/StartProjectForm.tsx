@@ -481,7 +481,8 @@ export default function StartProjectForm() {
               className="mt-4 text-[11px] leading-[1.7] text-center"
               style={{ color: "var(--dim2)" }}
             >
-              A copy of your accepted declaration is sent to Uthistan as a PDF.
+              A copy of your accepted declaration will be sent to both you and
+              Uthistan for your records.
             </p>
           </div>
         </form>
