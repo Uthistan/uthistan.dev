@@ -13,9 +13,9 @@ import {
 export const runtime = "nodejs";
 export const maxDuration = 30;
 
-const TO_EMAIL = process.env.DECLARATION_TO_EMAIL ?? "uthistanravi@gmail.com";
+const DEFAULT_TO_EMAIL = "uthistanravi@gmail.com";
 // Sends from the verified uthistan.com domain in Resend.
-const FROM_EMAIL = process.env.DECLARATION_FROM_EMAIL ?? "Uthistan <declarations@uthistan.com>";
+const DEFAULT_FROM_EMAIL = "Uthistan <declarations@uthistan.com>";
 
 const MAX_BODY_BYTES = 32 * 1024;
 
@@ -39,6 +39,20 @@ function isRateLimited(key: string): boolean {
     }
   }
   return recent.length > RATE_LIMIT.max;
+}
+
+/**
+ * Stage logging for production debugging.
+ *
+ * Deliberately records only non-sensitive metadata — never API keys, client
+ * names, emails, phone numbers or project text. Values are booleans, counts,
+ * durations and byte sizes only.
+ */
+function log(requestId: string, stage: string, detail?: Record<string, unknown>) {
+  const suffix = detail
+    ? " " + Object.entries(detail).map(([k, v]) => `${k}=${v}`).join(" ")
+    : "";
+  console.log(`[start-project] ${requestId} ${stage}${suffix}`);
 }
 
 function escapeHtml(value: string): string {
@@ -83,6 +97,10 @@ function buildEmail(data: DeclarationInput, stamp: string) {
 }
 
 export async function POST(request: Request) {
+  const requestId = Math.random().toString(36).slice(2, 8);
+  const startedAt = Date.now();
+  log(requestId, "request received");
+
   // --- Throttle -----------------------------------------------------------
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
@@ -90,6 +108,7 @@ export async function POST(request: Request) {
     "unknown";
 
   if (isRateLimited(ip)) {
+    log(requestId, "rejected: rate limited");
     return NextResponse.json(
       { ok: false, message: "Too many submissions. Please try again in a few minutes." },
       { status: 429 },
@@ -99,6 +118,7 @@ export async function POST(request: Request) {
   // --- Parse --------------------------------------------------------------
   const raw = await request.text();
   if (raw.length > MAX_BODY_BYTES) {
+    log(requestId, "rejected: body too large", { bytes: raw.length });
     return NextResponse.json(
       { ok: false, message: "That submission is too large." },
       { status: 413 },
@@ -109,50 +129,78 @@ export async function POST(request: Request) {
   try {
     body = JSON.parse(raw);
   } catch {
+    log(requestId, "rejected: malformed JSON");
     return NextResponse.json({ ok: false, message: "Invalid request." }, { status: 400 });
   }
 
   // --- Validate (never trust the client) ----------------------------------
   const result = validateDeclaration(body);
   if (!result.ok) {
+    log(requestId, "rejected: validation failed", {
+      fields: Object.keys(result.errors).length,
+    });
     return NextResponse.json(
       { ok: false, message: "Please check the highlighted fields.", errors: result.errors },
       { status: 400 },
     );
   }
   const data = result.value;
+  log(requestId, "payload validated");
 
   // --- Config -------------------------------------------------------------
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.error("[start-project] RESEND_API_KEY is not set");
+    console.error(
+      `[start-project] ${requestId} FATAL: RESEND_API_KEY is not set in this environment. ` +
+        `Set it in Vercel > Settings > Environment Variables and redeploy.`,
+    );
     return NextResponse.json(
       { ok: false, message: "Submissions aren't configured yet. Please email me directly." },
       { status: 500 },
     );
   }
 
+  // Read at request time so a Vercel env change takes effect on the next
+  // invocation rather than being frozen into module scope at cold start.
+  const toEmail = process.env.DECLARATION_TO_EMAIL ?? DEFAULT_TO_EMAIL;
+  const fromEmail = process.env.DECLARATION_FROM_EMAIL ?? DEFAULT_FROM_EMAIL;
+
+  log(requestId, "config ok", {
+    hasApiKey: true,
+    hasToOverride: Boolean(process.env.DECLARATION_TO_EMAIL),
+    hasFromOverride: Boolean(process.env.DECLARATION_FROM_EMAIL),
+  });
+
   const submittedAt = new Date();
   const stamp = formatSubmittedAt(submittedAt);
 
   // --- PDF ----------------------------------------------------------------
   let pdf: Buffer;
+  const pdfStartedAt = Date.now();
+  log(requestId, "pdf generation started");
   try {
     pdf = await renderDeclarationPdf(data, submittedAt);
   } catch (error) {
-    console.error("[start-project] PDF generation failed", error);
+    console.error(`[start-project] ${requestId} PDF generation failed`, error);
     return NextResponse.json(
       { ok: false, message: "We couldn't generate your declaration PDF. Please try again." },
       { status: 500 },
     );
   }
 
+  log(requestId, "pdf generation completed", {
+    bytes: pdf.length,
+    ms: Date.now() - pdfStartedAt,
+  });
+
   // --- Email --------------------------------------------------------------
+  const emailStartedAt = Date.now();
+  log(requestId, "resend call started");
   try {
     const { text, html } = buildEmail(data, stamp);
     const { error } = await new Resend(apiKey).emails.send({
-      from: FROM_EMAIL,
-      to: TO_EMAIL,
+      from: fromEmail,
+      to: toEmail,
       replyTo: data.email,
       subject: `New Client Project Declaration — ${data.company}`,
       text,
@@ -166,19 +214,22 @@ export async function POST(request: Request) {
     });
 
     if (error) {
-      console.error("[start-project] Resend rejected the message", error);
+      console.error(`[start-project] ${requestId} Resend rejected the message`, error);
       return NextResponse.json(
         { ok: false, message: "We couldn't send your declaration. Please try again." },
         { status: 502 },
       );
     }
   } catch (error) {
-    console.error("[start-project] Email sending failed", error);
+    console.error(`[start-project] ${requestId} Email sending failed`, error);
     return NextResponse.json(
       { ok: false, message: "We couldn't send your declaration. Please try again." },
       { status: 502 },
     );
   }
+
+  log(requestId, "resend response received", { ms: Date.now() - emailStartedAt });
+  log(requestId, "completed", { totalMs: Date.now() - startedAt });
 
   return NextResponse.json({ ok: true });
 }
