@@ -107,6 +107,63 @@ html.light .cursor-hover .cursor-ring { border-color: rgba(154,124,94,0.5); }
   outline: none;
 }
 
+/* ===== Project brief form (/start-project) ===== */
+.sp-field {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--b2);
+  border-radius: 8px;
+  background: var(--input-bg);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  outline: none;
+  transition: border-color .3s, box-shadow .3s;
+}
+.sp-field::placeholder { color: var(--dim2); }
+.sp-field:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 185, 155, 0.1);
+  outline: none;
+}
+.sp-field[aria-invalid="true"] { border-color: rgba(224, 112, 112, 0.55); }
+.sp-field[aria-invalid="true"]:focus {
+  border-color: #e07070;
+  box-shadow: 0 0 0 3px rgba(224, 112, 112, 0.12);
+}
+textarea.sp-field { display: block; resize: vertical; line-height: 1.75; }
+select.sp-field { appearance: none; padding-right: 40px; cursor: pointer; }
+select.sp-field option { background: var(--bg1); color: var(--ink); }
+
+/* Confirmation checkbox */
+.sp-check {
+  appearance: none;
+  position: relative;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border: 1px solid var(--b2);
+  border-radius: 4px;
+  background: var(--input-bg);
+  cursor: pointer;
+  transition: border-color .25s, background-color .25s;
+}
+.sp-check:checked { background: var(--gold); border-color: var(--gold); }
+.sp-check:checked::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 9px;
+  border: solid #070707;
+  border-width: 0 1.6px 1.6px 0;
+  transform: rotate(45deg);
+}
+.sp-check[aria-invalid="true"] { border-color: rgba(224, 112, 112, 0.55); }
+
 @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation-duration:.01ms!important; transition-duration:.01ms!important; } }
 
 /* ===== MOBILE ===== */

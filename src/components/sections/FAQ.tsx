@@ -27,7 +27,7 @@ export default function FAQ() {
           FAQ
         </div>
         <h2 className="fq-title font-medium leading-[1.05]" style={{ fontSize: "clamp(2rem,3.5vw,3.4rem)", letterSpacing: "-0.04em", marginTop: 56 }}>
-          Got questions?<br /><em style={{ fontStyle: "italic", fontWeight: 300, color: "var(--gold)" }}>I've got answers.</em>
+          Got questions?<br /><em style={{ fontStyle: "italic", fontWeight: 300, color: "var(--gold)" }}>I&apos;ve got answers.</em>
         </h2>
       </div>
       <div>

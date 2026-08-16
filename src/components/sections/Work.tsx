@@ -36,7 +36,7 @@ export default function Work() {
           <div className="text-[10px] tracking-[0.06em] relative z-10" style={{ color: "var(--dim2)" }}>{p.num}</div>
           <div className="relative z-10">
             <div className="proj-name text-[17px] font-medium tracking-[-0.02em] mb-1 transition-colors duration-300">{p.name}</div>
-            <div className="text-[12px] leading-[1.5] mb-2" style={{ color: "var(--dim)" }}>"{p.hook}"</div>
+            <div className="text-[12px] leading-[1.5] mb-2" style={{ color: "var(--dim)" }}>&quot;{p.hook}&quot;</div>
             <div className="flex gap-1 flex-wrap">
               {p.tags.map((t) => (
                 <span key={t} className="proj-tag text-[10px] px-2 py-0 border rounded-full tracking-[0.03em] transition-[border-color] duration-300" style={{ border: "1px solid var(--b2)", color: "var(--dim2)" }}>{t}</span>
