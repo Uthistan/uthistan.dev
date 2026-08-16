@@ -65,7 +65,13 @@ function FieldError({ id, message }: { id: string; message?: string }) {
   );
 }
 
-function Row({ wide, children }: { wide?: boolean; children: React.ReactNode }) {
+function Row({
+  wide,
+  children,
+}: {
+  wide?: boolean;
+  children: React.ReactNode;
+}) {
   return <div className={wide ? "md:col-span-2" : undefined}>{children}</div>;
 }
 
@@ -89,7 +95,10 @@ export default function StartProjectForm() {
   const [submitError, setSubmitError] = useState("");
   const [sent, setSent] = useState(false);
 
-  const set = <K extends keyof DeclarationInput>(key: K, value: DeclarationInput[K]) => {
+  const set = <K extends keyof DeclarationInput>(
+    key: K,
+    value: DeclarationInput[K],
+  ) => {
     setForm((f) => ({ ...f, [key]: value }));
     // Clear a field's error as soon as it's touched again
     setErrors((e) => (e[key] ? { ...e, [key]: undefined } : e));
@@ -105,7 +114,9 @@ export default function StartProjectForm() {
     "aria-invalid": errors[key] ? (true as const) : undefined,
     "aria-describedby": errors[key] ? `sp-${key}-error` : undefined,
     onChange: (
-      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
     ) => set(key, e.target.value),
   });
 
@@ -137,16 +148,20 @@ export default function StartProjectForm() {
         body: JSON.stringify(result.value),
       });
 
-      const payload = (await response.json().catch(() => null)) as
-        | { ok?: boolean; message?: string; errors?: FieldErrors }
-        | null;
+      const payload = (await response.json().catch(() => null)) as {
+        ok?: boolean;
+        message?: string;
+        errors?: FieldErrors;
+      } | null;
 
       if (!response.ok) {
         if (payload?.errors) {
           setErrors(payload.errors);
           focusFirstInvalid(payload.errors);
         }
-        setSubmitError(payload?.message ?? "Something went wrong. Please try again.");
+        setSubmitError(
+          payload?.message ?? "Something went wrong. Please try again.",
+        );
         setStatus("error");
         return;
       }
@@ -193,10 +208,19 @@ export default function StartProjectForm() {
               el?.focus();
             }}
             className="font-medium leading-[1.05] mb-6 outline-none"
-            style={{ fontSize: "clamp(2rem,5vw,3.4rem)", letterSpacing: "-0.04em" }}
+            style={{
+              fontSize: "clamp(2rem,5vw,3.4rem)",
+              letterSpacing: "-0.04em",
+            }}
           >
             Declaration submitted{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 300, color: "var(--gold)" }}>
+            <em
+              style={{
+                fontStyle: "italic",
+                fontWeight: 300,
+                color: "var(--gold)",
+              }}
+            >
               successfully.
             </em>
           </h1>
@@ -204,8 +228,8 @@ export default function StartProjectForm() {
             className="text-[14px] leading-[1.9] max-w-[56ch] mb-12"
             style={{ color: "var(--dim)" }}
           >
-            Your project declaration has been received. I&apos;ll review it and get back to
-            you with the next steps.
+            Your project declaration has been received. I&apos;ll review it and
+            get back to you with the next steps.
           </p>
           <Link
             href="/"
@@ -238,23 +262,38 @@ export default function StartProjectForm() {
           </div>
           <h1
             className="font-medium leading-[1.05] mb-6"
-            style={{ fontSize: "clamp(2rem,5vw,3.4rem)", letterSpacing: "-0.04em" }}
+            style={{
+              fontSize: "clamp(2rem,5vw,3.4rem)",
+              letterSpacing: "-0.04em",
+            }}
           >
             Project
             <br />
-            <em style={{ fontStyle: "italic", fontWeight: 300, color: "var(--gold)" }}>
+            <em
+              style={{
+                fontStyle: "italic",
+                fontWeight: 300,
+                color: "var(--gold)",
+              }}
+            >
               declaration.
             </em>
           </h1>
-          <p className="text-[14px] leading-[1.9] max-w-[56ch]" style={{ color: "var(--dim)" }}>
-            A short confirmation before development begins — your details, the project, and
-            an acknowledgement of how we&apos;ll work together.
+          <p
+            className="text-[14px] leading-[1.9] max-w-[56ch]"
+            style={{ color: "var(--dim)" }}
+          >
+            A short confirmation before development begins — your details, the
+            project, and an acknowledgement of how we&apos;ll work together.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} noValidate>
           {/* Details */}
-          <div className="py-12 md:py-16" style={{ borderTop: "1px solid var(--border)" }}>
+          <div
+            className="py-12 md:py-16"
+            style={{ borderTop: "1px solid var(--border)" }}
+          >
             <SectionLabel>Your details</SectionLabel>
 
             <div className="grid gap-x-6 gap-y-8 md:grid-cols-2">
@@ -262,7 +301,12 @@ export default function StartProjectForm() {
                 <Label htmlFor="sp-fullName" required>
                   Full name
                 </Label>
-                <input {...field("fullName")} type="text" autoComplete="name" placeholder="Jane Doe" />
+                <input
+                  {...field("fullName")}
+                  type="text"
+                  autoComplete="name"
+                  placeholder="Enter full name"
+                />
                 <FieldError id="sp-fullName-error" message={errors.fullName} />
               </Row>
 
@@ -274,7 +318,7 @@ export default function StartProjectForm() {
                   {...field("company")}
                   type="text"
                   autoComplete="organization"
-                  placeholder="Acme Studio"
+                  placeholder="Enter company or business name"
                 />
                 <FieldError id="sp-company-error" message={errors.company} />
               </Row>
@@ -283,21 +327,38 @@ export default function StartProjectForm() {
                 <Label htmlFor="sp-email" required>
                   Email
                 </Label>
-                <input {...field("email")} type="email" autoComplete="email" placeholder="jane@acme.com" />
+                <input
+                  {...field("email")}
+                  type="email"
+                  autoComplete="email"
+                  placeholder="Enter email address"
+                />
                 <FieldError id="sp-email-error" message={errors.email} />
               </Row>
 
               <Row>
                 <Label htmlFor="sp-phone">Phone / WhatsApp</Label>
-                <input {...field("phone")} type="tel" autoComplete="tel" placeholder="+91 98765 43210" />
+                <input
+                  {...field("phone")}
+                  type="tel"
+                  autoComplete="tel"
+                  placeholder="Enter phone number"
+                />
               </Row>
 
               <Row>
                 <Label htmlFor="sp-projectName" required>
                   Project name
                 </Label>
-                <input {...field("projectName")} type="text" placeholder="Acme storefront" />
-                <FieldError id="sp-projectName-error" message={errors.projectName} />
+                <input
+                  {...field("projectName")}
+                  type="text"
+                  placeholder="Enter project/business name"
+                />
+                <FieldError
+                  id="sp-projectName-error"
+                  message={errors.projectName}
+                />
               </Row>
 
               <Row>
@@ -307,7 +368,9 @@ export default function StartProjectForm() {
                 <div className="relative">
                   <select
                     {...field("projectType")}
-                    style={{ color: form.projectType ? "var(--ink)" : "var(--dim2)" }}
+                    style={{
+                      color: form.projectType ? "var(--ink)" : "var(--dim2)",
+                    }}
                   >
                     <option value="">Select a type…</option>
                     {PROJECT_TYPES.map((t) => (
@@ -324,7 +387,10 @@ export default function StartProjectForm() {
                     ▼
                   </span>
                 </div>
-                <FieldError id="sp-projectType-error" message={errors.projectType} />
+                <FieldError
+                  id="sp-projectType-error"
+                  message={errors.projectType}
+                />
               </Row>
 
               <Row wide>
@@ -336,18 +402,28 @@ export default function StartProjectForm() {
                   rows={4}
                   placeholder="A couple of lines on what you need built."
                 />
-                <FieldError id="sp-description-error" message={errors.description} />
+                <FieldError
+                  id="sp-description-error"
+                  message={errors.description}
+                />
               </Row>
             </div>
           </div>
 
           {/* Declaration */}
-          <div className="py-12 md:py-16" style={{ borderTop: "1px solid var(--border)" }}>
+          <div
+            className="py-12 md:py-16"
+            style={{ borderTop: "1px solid var(--border)" }}
+          >
             <SectionLabel>Client declaration</SectionLabel>
 
             <div className="max-w-[62ch] space-y-6 mb-10">
               {DECLARATION.map((paragraph) => (
-                <p key={paragraph} className="text-[14px] leading-[1.9]" style={{ color: "var(--dim)" }}>
+                <p
+                  key={paragraph}
+                  className="text-[14px] leading-[1.9]"
+                  style={{ color: "var(--dim)" }}
+                >
                   {paragraph}
                 </p>
               ))}
@@ -366,7 +442,9 @@ export default function StartProjectForm() {
                 checked={form.consent}
                 disabled={submitting}
                 aria-invalid={errors.consent ? true : undefined}
-                aria-describedby={errors.consent ? "sp-consent-error" : undefined}
+                aria-describedby={
+                  errors.consent ? "sp-consent-error" : undefined
+                }
                 onChange={(e) => set("consent", e.target.checked)}
               />
               <span>
