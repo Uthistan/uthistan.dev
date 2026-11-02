@@ -1,21 +1,13 @@
 import { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://uthistan.com";
-
   return [
     {
-      url: baseUrl,
+      url: SITE_URL,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
     },
-    {
-      url: `${baseUrl}/start-project`,
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.8,
-    },
   ];
 }
-``

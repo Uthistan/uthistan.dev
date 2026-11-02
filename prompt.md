@@ -3,7 +3,7 @@ You are acting as a Senior Frontend Engineer, UI/UX Designer, and Performance En
 First, analyze the entire codebase and understand the existing architecture before making any changes.
 
 Live Website:
-https://uthistan-portfolio.vercel.app/
+https://uthistan.com/
 
 ## Objective
 

@@ -84,7 +84,7 @@ export function BrowserVis() {
         {[["#ff5f57"], ["#febc2e"], ["#28c840"]].map(([c]) => (
           <div key={c} className="w-2 h-2 rounded-full" style={{ background: c }} />
         ))}
-        <div className="flex-1 h-4 rounded mx-2 flex items-center px-2 text-[8px]" style={{ background: "rgba(255,255,255,.06)", color: "rgba(201,185,155,.4)" }}>uthistan.dev</div>
+        <div className="flex-1 h-4 rounded mx-2 flex items-center px-2 text-[8px]" style={{ background: "rgba(255,255,255,.06)", color: "rgba(201,185,155,.4)" }}>uthistan.com</div>
       </div>
       <div className="p-5" style={{ background: "var(--bg2)", minHeight: 180 }}>
         <div className="h-[6px] rounded-sm mb-4" style={{ background: "rgba(201,185,155,.14)", animation: "bk 2s ease-in-out infinite" }} />

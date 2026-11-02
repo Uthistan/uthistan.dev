@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { SITE_NAME, SITE_TAGLINE, SITE_TITLE, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://uthistan.com"),
+  metadataBase: new URL(SITE_URL),
 
-  title: "Uthistan — Full-Stack Engineer",
+  title: SITE_TITLE,
   description:
     "Full-stack engineer building web apps, mobile products, CRMs and SaaS platforms. Bengaluru, India.",
 
@@ -29,20 +30,18 @@ export const metadata: Metadata = {
   creator: "Uthistan",
 
   openGraph: {
-    title: "Uthistan — Full-Stack Engineer",
-    description:
-      "The engineer your business hires once and keeps calling back.",
+    title: SITE_TITLE,
+    description: SITE_TAGLINE,
     type: "website",
-    url: "https://uthistan.com/",
-    siteName: "Uthistan Portfolio",
+    url: `${SITE_URL}/`,
+    siteName: SITE_NAME,
     locale: "en_US",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "Uthistan — Full-Stack Engineer",
-    description:
-      "The engineer your business hires once and keeps calling back.",
+    title: SITE_TITLE,
+    description: SITE_TAGLINE,
   },
 
   robots: {
@@ -55,7 +54,7 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "https://uthistan.com/",
+    canonical: `${SITE_URL}/`,
   },
 };
 
@@ -64,7 +63,7 @@ const jsonLd = {
   "@type": "Person",
   name: "Uthistan",
   jobTitle: "Full-Stack Engineer",
-  url: "https://uthistan.com/",
+  url: `${SITE_URL}/`,
   email: "uthistanravi@gmail.com",
   description:
     "Full-stack engineer building web apps, mobile products, CRMs and SaaS platforms.",
